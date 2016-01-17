@@ -7417,7 +7417,7 @@ jQuery.fn.extend( {
 			while ( ( elem = this[ i++ ] ) ) {
 				curValue = getClass( elem );
 
-				// This expression is here for better compressibility (see addClass)
+				// This expression is here for better compressibility (see ClassesClassify)
 				cur = elem.nodeType === 1 &&
 					( " " + curValue + " " ).replace( rclass, " " );
 

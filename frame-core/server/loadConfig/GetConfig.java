@@ -22,6 +22,10 @@ public class GetConfig {
         CONFIGS = LoadConfig.loadConfig(CONFIG_FILE);
     }
 
+    public static void setAppViewPath(String appViewPath) {
+        CONFIGS.setProperty(ConfigConstant.APP_VIEW_PATH, appViewPath);
+    }
+
     public static String getAppViewPath() {
         return StringUtil.isEmpty(CONFIGS.getProperty(ConfigConstant.APP_VIEW_PATH)) ? ConfigConstant.DEFAULT_APP_VIEW_PATH : CONFIGS.getProperty(ConfigConstant.APP_VIEW_PATH);
     }
