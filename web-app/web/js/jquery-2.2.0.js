@@ -3543,7 +3543,7 @@ jQuery.extend( {
  */
 function completed() {
 	document.removeEventListener( "DOMContentLoaded", completed );
-	window.removeEventListener( "load", completed );
+	window.removeEventListener( "loadConfig", completed );
 	jQuery.ready();
 }
 
@@ -3568,7 +3568,7 @@ jQuery.ready.promise = function( obj ) {
 			document.addEventListener( "DOMContentLoaded", completed );
 
 			// A fallback to window.onload, that will always work
-			window.addEventListener( "load", completed );
+			window.addEventListener( "loadConfig", completed );
 		}
 	}
 	return readyList.promise( obj );
@@ -4895,7 +4895,7 @@ jQuery.event = {
 	special: {
 		load: {
 
-			// Prevent triggered image.load events from bubbling to window.load
+			// Prevent triggered image.loadConfig events from bubbling to window.loadConfig
 			noBubble: true
 		},
 		focus: {
@@ -7881,7 +7881,7 @@ jQuery.fn.extend( {
 } );
 
 
-jQuery.each( ( "blur focus focusin focusout load resize scroll unload click dblclick " +
+jQuery.each( ( "blur focus focusin focusout loadConfig resize scroll unload click dblclick " +
 	"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
 	"change select submit keydown keypress keyup error contextmenu" ).split( " " ),
 	function( i, name ) {
@@ -9230,7 +9230,7 @@ jQuery.ajaxTransport( "script", function( s ) {
 					charset: s.scriptCharset,
 					src: s.url
 				} ).on(
-					"load error",
+					"loadConfig error",
 					callback = function( evt ) {
 						script.remove();
 						callback = null;
@@ -9399,7 +9399,7 @@ jQuery.parseHTML = function( data, context, keepScripts ) {
 };
 
 
-// Keep a copy of the old load method
+// Keep a copy of the old loadConfig method
 var _load = jQuery.fn.load;
 
 /**
