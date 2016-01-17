@@ -1,6 +1,7 @@
 package server.filter;
 
 import javax.servlet.*;
+import javax.servlet.FilterConfig;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
