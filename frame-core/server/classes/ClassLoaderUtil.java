@@ -98,6 +98,7 @@ public class ClassLoaderUtil {
                 }
             }
         } catch (Exception e) {
+            logger.error(LogDefine.getErrorLog("Get PackageClass Error", e));
         }
         return classSet;
     }
