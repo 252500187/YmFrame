@@ -7,6 +7,7 @@
     <groupId>frame-core</groupId>
     <artifactId>frame-core</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

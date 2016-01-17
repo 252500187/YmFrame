@@ -7,11 +7,13 @@
     <groupId>web-app</groupId>
     <artifactId>web-app</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <dependencies>
         <dependency>
             <artifactId>frame-core</artifactId>
             <groupId>frame-core</groupId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
