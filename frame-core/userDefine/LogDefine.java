@@ -8,8 +8,8 @@ package userDefine;
  * To change this template use File | Settings | File Templates.
  */
 public class LogDefine {
-    public static String getErrorLog(String errorLocation, Exception errorException) {
-        return errorLocation + ": " + errorException;
+    public static String getErrorLog(String errorLocation, String errorContent, Exception errorException) {
+        return errorLocation + ": " + errorContent + " Exception: " + errorException;
     }
 
     public static String getInfoLog(String logLocation, String logContent) {

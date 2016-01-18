@@ -35,7 +35,7 @@ public class ClassLoaderUtil {
             loadClass = Class.forName(className);
         } catch (Exception e) {
             loadClass = null;
-            logger.error(LogDefine.getErrorLog("loadClassError", e));
+            logger.error(LogDefine.getErrorLog("loadClassError", className, e));
         }
         return loadClass;
     }
@@ -98,7 +98,7 @@ public class ClassLoaderUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(LogDefine.getErrorLog("Get PackageClass Error", e));
+            logger.error(LogDefine.getErrorLog("Get PackageClass Error", packageName, e));
         }
         return classSet;
     }

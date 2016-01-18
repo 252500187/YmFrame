@@ -26,7 +26,7 @@ public class LoadConfig {
             logger.info(LogDefine.getInfoLog("load configFile", configPath));
             configProperties.load(new FileInputStream(configPath));
         } catch (Exception e) {
-            logger.error(LogDefine.getErrorLog("loadConfigError", e));
+            logger.error(LogDefine.getErrorLog("loadConfigError", configPath, e));
         }
         return configProperties;
     }
