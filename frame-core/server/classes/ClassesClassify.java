@@ -1,12 +1,8 @@
 package server.classes;
 
-import org.apache.log4j.Logger;
 import server.Annotation.Action;
 import server.Annotation.Controller;
-import userDefine.LogDefine;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -19,8 +15,6 @@ import java.util.Set;
  * To change this template use File | Settings | File Templates.
  */
 public class ClassesClassify {
-
-    private static Logger logger = org.apache.log4j.Logger.getLogger(ClassesClassify.class);
 
     private static Set<Class<?>> classSet;
 
@@ -74,24 +68,7 @@ public class ClassesClassify {
         controllerMap.clear();
         for (Class<?> clas : classSet) {
             if (clas.isAnnotationPresent(Controller.class)) {
-                Annotation annotation = clas.getAnnotation(Controller.class);
-                Method[] annotationMethods = annotation.annotationType().getDeclaredMethods();
-                String mapKey = "";
-                for (Method method : annotationMethods) {
-                    if (!method.isAccessible()) {
-                        method.setAccessible(true);
-                    }
-                    try {
-                        if (("value").equals(method.getName())) {
-                            mapKey = method.invoke(annotation).toString();
-                        } else {
-                            method.invoke(annotation);
-                        }
-                    } catch (Exception e) {
-                        logger.error(LogDefine.getErrorLog("setControllerAnnotationClasses", "", e));
-                    }
-                }
-                controllerMap.put(mapKey, clas);
+                controllerMap.put(clas.getAnnotation(Controller.class).value(), clas);
             }
         }
     }
