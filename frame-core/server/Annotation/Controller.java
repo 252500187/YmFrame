@@ -12,8 +12,9 @@ import java.lang.annotation.Target;
  * Time: 下午7:44
  * To change this template use File | Settings | File Templates.
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Controller {
 
+    String value();
 }

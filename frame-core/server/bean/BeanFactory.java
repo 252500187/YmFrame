@@ -1,6 +1,7 @@
 package server.bean;
 
 import org.apache.log4j.Logger;
+import server.Annotation.Controller;
 import server.Annotation.Inject;
 import userDefine.LogDefine;
 
