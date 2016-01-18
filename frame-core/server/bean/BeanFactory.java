@@ -34,15 +34,14 @@ public class BeanFactory {
         return null;
     }
 
+
     public void buildBeanByInject(Class<?> clas, String beanName) {
         try {
             Object object = clas.newInstance();
             for (Field field : clas.getFields()) {
                 if (field.isAnnotationPresent(Inject.class)) {
                     Object bean = getBeanByClass(field.getType());
-                    if (bean != null) {
-                        field.set(object, bean);
-                    }
+                    field.set(object, bean);
                 }
             }
             beans.put(beanName, object);
