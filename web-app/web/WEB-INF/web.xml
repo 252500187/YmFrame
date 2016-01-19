@@ -16,7 +16,7 @@
 
     <filter>
         <filter-name>RequestFilter</filter-name>
-        <filter-class>com.server.filter.CoreRequest</filter-class>
+        <filter-class>com.filter.CoreRequest</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>RequestFilter</filter-name>

@@ -1,5 +1,6 @@
 package com.servlet;
 
+import com.server.vo.ControllerMethod;
 import org.apache.log4j.Logger;
 import com.server.bean.BeanFactory;
 import com.server.classes.ClassesFactory;
@@ -13,7 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lijunbo on 2016/1/12.
@@ -34,22 +38,19 @@ public class CoreServlet extends HttpServlet {
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String requestMethod = request.getMethod().toLowerCase();
-        String requestPath = request.getPathInfo();
-//        Controller controller = getController(requestMethod, requestPath);
-//        if (controller != null) {
-//            Class<?> controllerClass = controller.getControllerClass();
-//            Object Bean = getBean();
-//
-//            Map<String, Object> params = new HashMap<String, Object>();
-//            request.getParameterNames();
-//            request.getParameter("");
-//            params.put();
-//
-//            urlContext = request.getInputStream();
-//            urlContext.split("&");
-//            urlContext.split("=");
-//            params.put();
+        ControllerMethod controllerMethod = BeanFactory.getControllerActionMethod(request.getPathInfo(), request.getMethod().trim().toLowerCase());
+        if (controllerMethod != null) {
+            Map<String, Object> params = new HashMap<String, Object>();
+            Enumeration<String> requestParams = request.getParameterNames();
+            while (requestParams.hasMoreElements()) {
+                String paramName = requestParams.nextElement();
+                params.put(paramName, request.getParameter(paramName));
+            }
+            String urlContexts = request.getInputStream().toString();
+            for (String urlContent : urlContexts.split("&")) {
+                String content[] = urlContent.split("=");
+                params.put(content[0], content[1]);
+            }
 //
 //
 //            result = invok();
@@ -64,7 +65,7 @@ public class CoreServlet extends HttpServlet {
 //                response.getWriter().flush();
 //                response.getWriter().close();
 //            }
-//        }
+        }
     }
 
     @Override

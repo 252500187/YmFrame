@@ -1,5 +1,6 @@
 package com.server.bean;
 
+import com.server.vo.ControllerMethod;
 import org.apache.log4j.Logger;
 import com.server.Annotation.Action;
 import com.server.Annotation.Controller;
@@ -21,15 +22,11 @@ public class BeanFactory {
 
     private static Map<String, Object> beans = new HashMap<String, Object>();
 
-    private static Map<String, Map<String, Method>> controllerMethods = new HashMap<String, Map<String, Method>>();
+    private static Map<String, ControllerMethod> controllerMethods = new HashMap<String, ControllerMethod>();
 
     static {
-        try {
-            for (Class<?> clas : ClassesFactory.getClassSet()) {
-                beans.put(clas.getName(), clas.newInstance());
-            }
-        } catch (Exception e) {
-            logger.error(LogDefine.getErrorLog("BeanFactory", "", e));
+        for (Class<?> clas : ClassesFactory.getClassSet()) {
+            addBean(clas);
         }
     }
 
@@ -42,25 +39,52 @@ public class BeanFactory {
             Object object = clas.newInstance();
             beans.put(object.getClass().getName(), object);
             if (object.getClass().isAnnotationPresent(Controller.class)) {
-                addControllerMethods(object);
+                addControllerMethod(clas, object);
             }
         } catch (Exception e) {
             logger.error(LogDefine.getErrorLog("BeanFactory addBean", clas.getName(), e));
         }
     }
 
-    public static void addControllerMethods(Object object) {
-        Map<String, Method> actionMethods = new HashMap<String, Method>();
-        for (Method method : object.getClass().getDeclaredMethods()) {
+    public static void addControllerMethod(Class<?> clas, Object object) {
+        boolean errorControllerActionSet = false;
+        String controllerUrl = clas.getAnnotation(Controller.class).value();
+        for (Method method : clas.getDeclaredMethods()) {
             if (method.isAnnotationPresent(Action.class)) {
-                actionMethods.put(method.getAnnotation(Action.class).value(), method);
+                String methodUrl = method.getAnnotation(Action.class).value();
+                ControllerMethod controllerMethod = new ControllerMethod();
+                String methodWay = method.getAnnotation(Action.class).method().trim().toLowerCase();
+                if (!methodWay.equals("post") && !methodWay.equals("get") && !methodWay.equals("delete") && !methodWay.equals("update")) {
+                    errorControllerActionSet = true;
+                    break;
+                }
+                controllerMethod.setMethodWay(methodWay);
+                controllerMethod.setMethod(method);
+                controllerMethod.setObject(object);
+                controllerMethods.put(controllerUrl + methodUrl, controllerMethod);
             }
         }
-        controllerMethods.put(object.getClass().getAnnotation(Controller.class).value(), actionMethods);
+        if (errorControllerActionSet) {
+            try {
+                throw new Exception("UnSupport Request Method In Class: " + clas.getName());
+            } catch (Exception e) {
+                logger.error(LogDefine.getErrorLog("addControllerMethod", clas.getName(), e));
+            }
+        }
     }
 
-    public static Map<String, Map<String, Method>> getControllerMethods() {
+    public static Map<String, ControllerMethod> getControllerMethods() {
         return controllerMethods;
+    }
+
+    public static ControllerMethod getControllerActionMethod(String requestPath, String requestWay) {
+        ControllerMethod controllerMethod = controllerMethods.get(requestPath);
+        if (controllerMethod != null) {
+            if (controllerMethod.getMethodWay().equals(requestWay.trim().toLowerCase())) {
+                return controllerMethod;
+            }
+        }
+        return null;
     }
 
     public void buildBeanByInject(Class<?> clas) {

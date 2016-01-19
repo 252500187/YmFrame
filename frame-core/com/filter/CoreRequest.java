@@ -1,4 +1,4 @@
-package com.server.filter;
+package com.filter;
 
 import javax.servlet.*;
 import javax.servlet.FilterConfig;
