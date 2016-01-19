@@ -1,4 +1,4 @@
-package userDefine;
+package com.userDefine;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,8 +1,8 @@
-package server.loadConfig;
+package com.server.loadConfig;
 
 import org.apache.log4j.Logger;
-import userDefine.LogDefine;
-import util.StringUtil;
+import com.userDefine.LogDefine;
+import com.util.StringUtil;
 
 import java.io.FileInputStream;
 import java.util.Properties;
@@ -26,7 +26,7 @@ public class LoadConfig {
             logger.info(LogDefine.getInfoLog("load configFile", configPath));
             configProperties.load(new FileInputStream(configPath));
         } catch (Exception e) {
-            logger.error(LogDefine.getErrorLog("loadConfigError", configPath, e));
+            logger.error(LogDefine.getErrorLog("LoadConfig loadConfig", configPath, e));
         }
         return configProperties;
     }

@@ -1,7 +1,6 @@
-package server.loadConfig;
+package com.server.loadConfig;
 
-import org.apache.log4j.Logger;
-import util.StringUtil;
+import com.util.StringUtil;
 
 import java.util.Properties;
 

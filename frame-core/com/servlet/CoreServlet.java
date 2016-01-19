@@ -1,4 +1,9 @@
-package server.servlet;
+package com.servlet;
+
+import org.apache.log4j.Logger;
+import com.server.bean.BeanFactory;
+import com.server.classes.ClassesFactory;
+import com.userDefine.LogDefine;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -8,27 +13,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by lijunbo on 2016/1/12.
  */
 public class CoreServlet extends HttpServlet {
 
+    private static Logger logger = Logger.getLogger(CoreServlet.class);
+
     @Override
     public void init(ServletConfig servletConfig) {
-//        ServletContext servletContext = servletConfig.getServletContext();
-//        ServletRegistration jsfServlet = servletConfig.getServletRegistration("jsp");
-//        jsfServlet.addMapping("");
-//        ServletRegistration defaultServlet = servletContext.getServletRegistration("default");
-//        defaultServlet.addMapping("");
+        try {
+            Thread.currentThread().getContextClassLoader().loadClass(BeanFactory.class.getName());
+            Thread.currentThread().getContextClassLoader().loadClass(ClassesFactory.class.getName());
+        } catch (Exception e) {
+            logger.error(LogDefine.getErrorLog("HttpServlet init", "", e));
+        }
     }
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-//        String requestMethod = request.getMethod().toLowerCase();
-//        String requestPath = request.getPathInfo();
+        String requestMethod = request.getMethod().toLowerCase();
+        String requestPath = request.getPathInfo();
 //        Controller controller = getController(requestMethod, requestPath);
 //        if (controller != null) {
 //            Class<?> controllerClass = controller.getControllerClass();

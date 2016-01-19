@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>core-servlet</servlet-name>
-        <servlet-class>server.servlet.CoreServlet</servlet-class>
+        <servlet-class>com.servlet.CoreServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -16,7 +16,7 @@
 
     <filter>
         <filter-name>RequestFilter</filter-name>
-        <filter-class>server.filter.CoreRequest</filter-class>
+        <filter-class>com.server.filter.CoreRequest</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>RequestFilter</filter-name>

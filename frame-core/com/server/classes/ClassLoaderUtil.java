@@ -1,8 +1,8 @@
-package server.classes;
+package com.server.classes;
 
 import org.apache.log4j.Logger;
-import userDefine.LogDefine;
-import util.StringUtil;
+import com.userDefine.LogDefine;
+import com.util.StringUtil;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -35,7 +35,7 @@ public class ClassLoaderUtil {
             loadClass = Class.forName(className);
         } catch (Exception e) {
             loadClass = null;
-            logger.error(LogDefine.getErrorLog("loadClassError", className, e));
+            logger.error(LogDefine.getErrorLog("ClassLoaderUtil loadClass", className, e));
         }
         return loadClass;
     }
@@ -98,7 +98,7 @@ public class ClassLoaderUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(LogDefine.getErrorLog("Get PackageClass Error", packageName, e));
+            logger.error(LogDefine.getErrorLog("ClassLoaderUtil getPackageClassSet", packageName, e));
         }
         return classSet;
     }

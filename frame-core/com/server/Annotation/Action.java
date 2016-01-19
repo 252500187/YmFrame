@@ -1,4 +1,4 @@
-package server.Annotation;
+package com.server.Annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,12 +9,12 @@ import java.lang.annotation.Target;
  * Created with IntelliJ IDEA.
  * User: Yam_hard
  * Date: 16-1-17
- * Time: 下午7:44
+ * Time: 下午7:49
  * To change this template use File | Settings | File Templates.
  */
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Controller {
+public @interface Action {
 
-    String value() default "";
+    public String value();
 }

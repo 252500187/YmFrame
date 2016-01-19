@@ -1,4 +1,4 @@
-package server.loadConfig;
+package com.server.loadConfig;
 
 /**
  * Created with IntelliJ IDEA.
