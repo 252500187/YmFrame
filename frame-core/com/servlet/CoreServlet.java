@@ -66,13 +66,12 @@ public class CoreServlet extends HttpServlet {
                 logger.error(LogDefine.getErrorLog("Servlet Invoke ControllerMethod", controllerMethod.getMethod().getName(), e));
             }
             if (result instanceof ControllerView) {
-//                response.sendRedirect("");
-//                request.getRequestDispatcher("");
+                response.sendRedirect(((ControllerView) result).getToUrl());
             } else if (result instanceof String) {
                 response.sendRedirect((String) result);
             } else if (result instanceof ControllerData) {
                 response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
+                response.setCharacterEncoding("utf-8");
                 response.getWriter().write(JsonUtil.toJson(result));
                 response.getWriter().flush();
                 response.getWriter().close();
