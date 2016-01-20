@@ -1,22 +1,23 @@
 package com.servlet;
 
-import com.server.vo.ControllerMethod;
-import org.apache.log4j.Logger;
 import com.server.bean.BeanFactory;
 import com.server.classes.ClassesFactory;
+import com.server.vo.ControllerData;
+import com.server.vo.ControllerMethod;
+import com.server.vo.ControllerView;
 import com.userDefine.LogDefine;
+import com.util.JsonUtil;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,43 +47,49 @@ public class CoreServlet extends HttpServlet {
                 String paramName = requestParams.nextElement();
                 params.put(paramName, request.getParameter(paramName));
             }
-            String urlContexts = request.getInputStream().toString();
+            String urlContexts = null;
+            InputStream inputStream = request.getInputStream();
+            //2432 bytes
+            byte[] buffer = new byte[inputStream.available()];
+            while (inputStream.read(buffer) != -1) {
+                urlContexts += new String(buffer, "utf-8");
+            }
+            inputStream.close();
             for (String urlContent : urlContexts.split("&")) {
                 String content[] = urlContent.split("=");
                 params.put(content[0], content[1]);
             }
-//
-//
-//            result = invok();
-//
-//            if (result) {
+            Object result = null;
+            try {
+                result = controllerMethod.getMethod().invoke(controllerMethod.getObject(), params);
+            } catch (Exception e) {
+                logger.error(LogDefine.getErrorLog("Servlet Invoke ControllerMethod", controllerMethod.getMethod().getName(), e));
+            }
+            if (result instanceof ControllerView) {
 //                response.sendRedirect("");
-//                request.getRequestDispatcher("").forward("");
-//            } else if (result) {
-//                response.setContentType("application/json");
-//                response.setCharacterEncoding("UTF-8");
-//                response.getWriter().write(result.toJson);
-//                response.getWriter().flush();
-//                response.getWriter().close();
-//            }
+//                request.getRequestDispatcher("");
+            } else if (result instanceof String) {
+                response.sendRedirect((String) result);
+            } else if (result instanceof ControllerData) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(JsonUtil.toJson(result));
+                response.getWriter().flush();
+                response.getWriter().close();
+            }
         }
     }
 
     @Override
     public void destroy() {
         super.destroy();
-        System.out.println(-1);
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        PrintWriter printWriter = response.getWriter();
-        printWriter.write("hehe");
-        System.out.println(1);
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        System.out.println(2);
     }
 }
