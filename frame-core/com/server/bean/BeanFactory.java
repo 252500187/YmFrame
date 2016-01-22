@@ -1,6 +1,7 @@
 package com.server.bean;
 
 import com.server.vo.ControllerMethod;
+import com.servlet.RequestWay;
 import org.apache.log4j.Logger;
 import com.server.Annotation.Action;
 import com.server.Annotation.Controller;
@@ -30,7 +31,7 @@ public class BeanFactory {
         }
     }
 
-    public Object getBean(String beanClassName) {
+    public static Object getBean(String beanClassName) {
         return beans.get(beanClassName);
     }
 
@@ -38,11 +39,27 @@ public class BeanFactory {
         try {
             Object object = clas.newInstance();
             beans.put(object.getClass().getName(), object);
-            if (object.getClass().isAnnotationPresent(Controller.class)) {
+            for (Object bean : beans.values()) {
+                modifyBeanByInject(bean);
+            }
+            if (clas.isAnnotationPresent(Controller.class)) {
                 addControllerMethod(clas, object);
             }
         } catch (Exception e) {
             logger.error(LogDefine.getErrorLog("BeanFactory addBean", clas.getName(), e));
+        }
+    }
+
+    public static void modifyBeanByInject(Object object) {
+        try {
+            for (Field field : object.getClass().getFields()) {
+                if (field.isAnnotationPresent(Inject.class)) {
+                    Object bean = getBean(field.getType().getName());
+                    field.set(object, bean);
+                }
+            }
+        } catch (Exception e) {
+            logger.error(LogDefine.getErrorLog("BeanFactory buildBeanByInject", object.getClass().getName(), e));
         }
     }
 
@@ -54,7 +71,7 @@ public class BeanFactory {
                 String methodUrl = method.getAnnotation(Action.class).value();
                 ControllerMethod controllerMethod = new ControllerMethod();
                 String methodWay = method.getAnnotation(Action.class).method().trim().toLowerCase();
-                if (!methodWay.equals("post") && !methodWay.equals("get") && !methodWay.equals("delete") && !methodWay.equals("update")) {
+                if (!methodWay.equals(RequestWay.GET) && !methodWay.equals(RequestWay.POST) && !methodWay.equals(RequestWay.UPDATE) && !methodWay.equals(RequestWay.DELETE)) {
                     errorControllerActionSet = true;
                     break;
                 }
@@ -85,20 +102,5 @@ public class BeanFactory {
             }
         }
         return null;
-    }
-
-    public void buildBeanByInject(Class<?> clas) {
-        try {
-            Object object = clas.newInstance();
-            for (Field field : clas.getFields()) {
-                if (field.isAnnotationPresent(Inject.class)) {
-                    Object bean = getBean(field.getType().getName());
-                    field.set(object, bean);
-                }
-            }
-            beans.put(clas.getName(), object);
-        } catch (Exception e) {
-            logger.error(LogDefine.getErrorLog("BeanFactory buildBeanByInject", clas.getName(), e));
-        }
     }
 }
